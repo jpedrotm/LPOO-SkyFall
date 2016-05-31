@@ -1,62 +1,56 @@
 package com.jose.skyfall.GUI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.jose.skyfall.Logic.*;
+import com.jose.skyfall.Logic.SkyFall;
 
 public class PlayScreen implements Screen {
 
     private SkyFall game;
-    Texture texture;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
+    private Hud hud;
+
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-    /*private SkyFall game;
-    private OrthographicCamera gameCam;
-    private Viewport gamePort;
-    //Classes desenvolvidas
-    private Hud hud;
     private Hero hero;
-    private Background background;*/
+    AndroidApplicationConfiguration config;
+
+
 
     public PlayScreen(SkyFall game){
         this.game=game;
-        //texture=new Texture("badlogic.jpg");
-        this.gameCam=new OrthographicCamera();
-        this.gamePort=new FillViewport(Gdx.app.getGraphics().getWidth(),Gdx.app.getGraphics().getHeight());
-
-        mapLoader=new TmxMapLoader();
-        map=mapLoader.load("world1.tmx");
-        gameCam.setToOrtho(false,Gdx.app.getGraphics().getWidth()*2,Gdx.app.getGraphics().getHeight()*2);
-        renderer=new OrthogonalTiledMapRenderer(map,1);
-        int map_width = (int)(((TiledMapTileLayer)map.getLayers().get(0)).getWidth() *  ((TiledMapTileLayer)map.getLayers().get(0)).getTileWidth());
-        int map_height = (int)(((TiledMapTileLayer)map.getLayers().get(0)).getHeight() *  ((TiledMapTileLayer)map.getLayers().get(0)).getTileHeight());
-        gameCam.position.set(map_width/2, map_height-20,0);
-
-       /* gameCam=new OrthographicCamera();
-        gamePort=new FillViewport(SkyFall.V_WIDTH/SkyFall.PPM,SkyFall.V_HEIGHT/SkyFall.PPM,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
+        gameCam=new OrthographicCamera();
+        gamePort=new FitViewport(SkyFall.V_WIDTH,SkyFall.V_HEIGHT,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
         hud=new Hud(game.batch);
 
-        background=new Background();
+        mapLoader = new TmxMapLoader();
+        map=mapLoader.load("test.tmx");
+        renderer= new OrthogonalTiledMapRenderer(map);
 
         gameCam.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
 
-        hero = new Hero(540, 1800);*/
+        hero = new Hero(450, 1500);
+
     }
 
     @Override
@@ -65,50 +59,42 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float delta){
-        if(Gdx.input.isTouched())
-            gameCam.position.y-=100*delta;
     }
 
     public void update(float delta){
         handleInput(delta);
-        gameCam.update();
-        renderer.setView(gameCam);
 
-        /*handleInput(delta);
-        //update do background
         gameCam.position.y-=100*delta;
-        //Update do heroi
+
+
+        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)){
+            float gyroX = Gdx.input.getGyroscopeX();
+            float gyroY = Gdx.input.getGyroscopeY();
+            float gyroZ = Gdx.input.getGyroscopeZ();
+            hero.move(gyroY * 50);
+        }
         hero.update(delta);
-        //update da cam do jogo
+
         gameCam.update();
-        //update background
-        background.update(gameCam);
-        //renderer.setView(gameCam);//Apenas mostra o que está na gameCam*/
+        renderer.setView(gameCam);//Apenas mostra o que está na gameCam
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
 
-        Gdx.gl.glClearColor(1,0,0,1);
+        update(delta);
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         renderer.render();
 
-        //update das variáveis antes de as desenhar
-       /* update(delta);
-       //Preenche o ecrã a preto
-        Gdx.gl.glClearColor(0,0,0,1);
-        //Limpar o ecrã(buffer)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //render do background
-        background.render();
-        //Definir o que vai aparecer do hud
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined); //Definir o que aparece no ecra (a partir daqui)
 
-        //Desenhar o heroi
-        hero.render(game.batch);
-        //hud.stage.draw();*/
+        game.batch.begin();
+        game.batch.draw(hero.getTexture(), hero.getPosition().x, hero.getPosition().y);
+        game.batch.end();
+
+        //hud.stage.draw();
     }
 
     @Override
