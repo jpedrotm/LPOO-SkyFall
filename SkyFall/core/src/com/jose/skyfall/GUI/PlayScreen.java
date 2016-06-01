@@ -17,11 +17,17 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.jose.skyfall.Logic.Hero;
+import com.jose.skyfall.Logic.Obstacle;
 import com.jose.skyfall.Logic.SkyFall;
 
 public class PlayScreen implements Screen {
+    private static final int OBSTACLE_SPACING = 350;
+    private static final int OBSTACLES_COUNT = 6;
+
 
     private SkyFall game;
     private OrthographicCamera gameCam;
@@ -33,6 +39,7 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
 
     private Hero hero;
+    private Array<Obstacle> obstacles;
     AndroidApplicationConfiguration config;
 
 
@@ -49,8 +56,12 @@ public class PlayScreen implements Screen {
 
         gameCam.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
 
-        hero = new Hero(450, 1500);
+        hero = new Hero(450, 2000);
+        obstacles = new Array<Obstacle>();
 
+        for (int i = 1; i <= OBSTACLES_COUNT; i++){
+            obstacles.add(new Obstacle((i+1) * OBSTACLE_SPACING));
+        }
     }
 
     @Override
@@ -64,7 +75,7 @@ public class PlayScreen implements Screen {
     public void update(float delta){
         handleInput(delta);
 
-        gameCam.position.y-=100*delta;
+        //gameCam.position.y-=100*delta;
 
 
         if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)){
@@ -74,9 +85,19 @@ public class PlayScreen implements Screen {
             hero.move(gyroY * 50);
         }
         hero.update(delta);
+        gameCam.position.y = hero.getPosition().y - (gameCam.viewportHeight/2) + 200;
+
+        for (Obstacle obs : obstacles){
+            if(gameCam.position.y + (gameCam.viewportHeight/2) < obs.getPosition().y)
+                obs.reposition(obs.getPosition().y - (OBSTACLE_SPACING * OBSTACLES_COUNT));
+
+            if(obs.collides(hero.getBounds())) {
+                game.setScreen(game.screens.firstElement());
+            }
+        }
 
         gameCam.update();
-        renderer.setView(gameCam);//Apenas mostra o que está na gameCam
+        //renderer.setView(gameCam);//Apenas mostra o que está na gameCam
     }
 
     @Override
@@ -86,12 +107,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.render();
+        //renderer.render();
 
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined); //Definir o que aparece no ecra (a partir daqui)
+        game.batch.setProjectionMatrix(gameCam.combined); //Definir o que aparece no ecra (a partir daqui)
 
         game.batch.begin();
         game.batch.draw(hero.getTexture(), hero.getPosition().x, hero.getPosition().y);
+        for (Obstacle obstacle : obstacles)
+            game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);
         game.batch.end();
 
         //hud.stage.draw();

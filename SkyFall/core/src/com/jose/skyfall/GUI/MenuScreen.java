@@ -31,8 +31,11 @@ public class MenuScreen implements Screen {
     }
 
     public void handleInput(float delta){
-        if(Gdx.input.getX()>((SkyFall.V_WIDTH/2)-(playB.getWidth()/2)) && Gdx.input.getX()<((SkyFall.V_WIDTH/2)+(playB.getWidth()/2)) && Gdx.input.getY()>((SkyFall.V_HEIGHT/2)-(playB.getHeight()/2)) && Gdx.input.getY()<((SkyFall.V_HEIGHT/2)+(playB.getHeight()/2)))
-            game.setScreen(new PlayScreen(game));
+        if(Gdx.input.getX()>((SkyFall.V_WIDTH/2)-(playB.getWidth()/2)) && Gdx.input.getX()<((SkyFall.V_WIDTH/2)+(playB.getWidth()/2)) && Gdx.input.getY()>((SkyFall.V_HEIGHT/2)-(playB.getHeight()/2)) && Gdx.input.getY()<((SkyFall.V_HEIGHT/2)+(playB.getHeight()/2))){
+            Screen screen = new PlayScreen(game);
+            game.screens.push(screen);
+            game.setScreen(game.screens.lastElement());
+        }
     }
 
     public void update(float delta){
