@@ -6,23 +6,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.Obstacle;
 import com.jose.skyfall.Logic.SkyFall;
+
+import sun.management.Sensor;
+
 
 public class PlayScreen implements Screen {
     private static final int OBSTACLE_SPACING = 350;
@@ -92,7 +87,9 @@ public class PlayScreen implements Screen {
                 obs.reposition(obs.getPosition().y - (OBSTACLE_SPACING * OBSTACLES_COUNT));
 
             if(obs.collides(hero.getBounds())) {
-                game.setScreen(game.screens.firstElement());
+                game.screens.pop();
+                game.setScreen(game.screens.peek());
+                break;
             }
         }
 

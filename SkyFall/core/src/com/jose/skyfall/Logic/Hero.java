@@ -34,11 +34,13 @@ public class Hero {
 
     public void update(float delta){
 
-        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)){
+        /*if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)){
             float gyroY = Gdx.input.getGyroscopeY();
             move(gyroY * 50);
-        }
-        position.add(velocity.x, MOVEMENT * delta, 0);
+        }*/
+        if (position.x + velocity.x > 0 && position.x + velocity.x < 913)
+            position.add(velocity.x, 0, 0);
+        position.add(0, MOVEMENT * delta , 0);
         bounds.setPosition(position.x, position.y);
     }
 

@@ -24,7 +24,7 @@ public class SkyFall extends Game {
 		batch = new SpriteBatch();
 		Screen screen = new MenuScreen(this);
 		screens.push(screen);
-		setScreen(screens.firstElement());
+		setScreen(screens.peek());
 	}
 
 	@Override
