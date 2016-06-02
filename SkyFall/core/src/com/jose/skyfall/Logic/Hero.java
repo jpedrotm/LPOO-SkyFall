@@ -21,7 +21,7 @@ import sun.management.Sensor;
  * Created by Bruno on 09/05/2016.
  */
 public class Hero {
-    private static final int MOVEMENT = -300;
+    private float MOVEMENT = -300;
     private static final int PLAYER_WIDTH=60;
     private static final int PLAYER_HEIGHT=70;
     private Vector3 position;
@@ -78,4 +78,9 @@ public class Hero {
     public void dispose(){
         textureAnimation.dispose();
     }
+
+    public void updateVolocity(){
+        MOVEMENT -= 0.2f;
+    }
+
 }

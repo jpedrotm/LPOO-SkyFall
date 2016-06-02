@@ -70,15 +70,18 @@ public class PlayScreen implements Screen {
         handleInput(delta);
 
         if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)){
-            float gyroX = Gdx.input.getGyroscopeX();
-            float gyroY = Gdx.input.getGyroscopeY();
-            float gyroZ = Gdx.input.getGyroscopeZ();
-            hero.move(gyroY * 50);
+            float accelX = Gdx.input.getAccelerometerX();
+            float accelY = Gdx.input.getAccelerometerY();
+            float accelZ = Gdx.input.getAccelerometerZ();
+            hero.move(accelY * 50);
         }
         hero.update(delta);
+        hero.updateVolocity();
         gameCam.position.y = hero.getPosition().y - (gameCam.viewportHeight/2)+200;
 
         for (Obstacle obs : obstacles){
+            obs.updatePosition(delta);
+
             if(gameCam.position.y + (gameCam.viewportHeight/2) < obs.getPosition().y)
                 obs.reposition(obs.getPosition().y - (OBSTACLE_SPACING * OBSTACLES_COUNT));
 
