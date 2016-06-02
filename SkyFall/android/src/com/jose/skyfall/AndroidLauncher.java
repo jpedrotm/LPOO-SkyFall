@@ -14,6 +14,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useGyroscope = true;
 		config.useAccelerometer = false;
 		config.useCompass = false;
+		config.useImmersiveMode = true;
 		initialize(new SkyFall(), config);
 	}
 }

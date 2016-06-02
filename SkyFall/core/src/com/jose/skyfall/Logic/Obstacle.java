@@ -18,7 +18,7 @@ public class Obstacle {
     private Random rand;
 
     public Obstacle(float y){
-        image = new Texture("playB.png");
+        image = new Texture("obstacleBomb.png");
         rand = new Random();
 
         position = new Vector2(rand.nextInt(VARIATION), y);
