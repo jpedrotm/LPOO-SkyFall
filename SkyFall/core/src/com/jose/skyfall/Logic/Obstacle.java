@@ -18,7 +18,7 @@ public class Obstacle {
     private Random rand;
 
     public Obstacle(float y){
-        image = new Texture("obstacleBomb.png");
+        image = new Texture("obstaclesBomb.png");
         rand = new Random();
 
         position = new Vector2(rand.nextInt(VARIATION), y);
@@ -42,5 +42,9 @@ public class Obstacle {
 
     public boolean collides(Rectangle hero){
         return hero.overlaps(bounds);
+    }
+
+    public void dispose(){
+        image.dispose();
     }
 }

@@ -84,7 +84,6 @@ public class MenuScreen implements Screen {
         stage.addActor(settingsButton);
         stage.addActor(exitButton);
 
-
     }
 
     public void handleInput(float delta){
