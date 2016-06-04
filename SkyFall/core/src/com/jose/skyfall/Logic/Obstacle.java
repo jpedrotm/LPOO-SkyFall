@@ -19,6 +19,8 @@ public class Obstacle {
     private Rectangle bounds;
     private Random rand;
 
+    private boolean destroied;
+
     public Obstacle(float y){
         image = new Texture("obstaclesBomb.png");
         rand = new Random();
@@ -30,6 +32,8 @@ public class Obstacle {
         movX = (num == 0);
 
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());
+
+        destroied = false;
     }
 
     public void render(SpriteBatch batch){
@@ -48,6 +52,8 @@ public class Obstacle {
         Random mov = new Random();
         int num = mov.nextInt(5);
         movX = (num == 0);
+
+        destroied = false;
     }
 
     public boolean collides(Rectangle hero){
@@ -66,5 +72,15 @@ public class Obstacle {
 
         if (position.x < 0 || position.x > 1024 - image.getWidth())
             XMOVEMENT = -XMOVEMENT;
+    }
+
+    //TODO
+    public void destroy(){
+        destroied = true;
+    }
+
+    //TODO
+    public boolean isDestroied(){
+        return destroied;
     }
 }

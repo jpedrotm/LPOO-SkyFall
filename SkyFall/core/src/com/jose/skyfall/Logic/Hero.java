@@ -31,6 +31,8 @@ public class Hero {
     private Rectangle bounds;
     private Animation heroAnimation;
 
+    private boolean superPower;
+
     public Hero(int tiledWidth,int tiledHeight){
 
         texture = new Texture("PlayerGreen.png");
@@ -42,6 +44,9 @@ public class Hero {
 
         textureAnimation=new Texture("PlayerGreen.png");
         heroAnimation=new Animation(new TextureRegion(textureAnimation),3,0.5f);
+
+        //TODO
+        superPower = false;
     }
 
     public void update(float delta){
@@ -83,4 +88,13 @@ public class Hero {
         MOVEMENT -= 0.2f;
     }
 
+    //TODO
+    public boolean getSuperPower(){
+        return superPower;
+    }
+
+    //TODO
+    public void setSuperPower(boolean value){
+        superPower = value;
+    }
 }

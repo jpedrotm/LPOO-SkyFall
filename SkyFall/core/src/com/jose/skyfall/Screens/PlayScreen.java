@@ -16,12 +16,15 @@ import com.jose.skyfall.Logic.Background;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.Obstacle;
 import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.Logic.SuperPower;
 
 
 public class PlayScreen implements Screen {
     private static final int OBSTACLE_SPACING = 350;
     private static final int OBSTACLES_COUNT = 6;
     private static final int OBSTACLES_INICIAL_DISTANCE=600;
+
+    private static final int SUPERPOWER_SPACING = 1000;
 
 
     private SkyFall game;
@@ -35,6 +38,7 @@ public class PlayScreen implements Screen {
 
     private Hero hero;
     private Array<Obstacle> obstacles;
+    private SuperPower sp;
     private Background background;
 
 
@@ -55,6 +59,8 @@ public class PlayScreen implements Screen {
         for (int i = 1; i <= OBSTACLES_COUNT; i++){
             obstacles.add(new Obstacle((i+1) * OBSTACLE_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
         }
+
+        sp = new SuperPower(SUPERPOWER_SPACING);
     }
 
     @Override
@@ -79,17 +85,33 @@ public class PlayScreen implements Screen {
         hero.updateVolocity();
         gameCam.position.y = hero.getPosition().y - (gameCam.viewportHeight/2)+200;
 
+        //TODO Implementado
+        if((gameCam.position.y + (gameCam.viewportHeight/2) < sp.getPosition().y) || sp.getCathed())
+            sp.reposition(sp.getPosition().y - SUPERPOWER_SPACING);
+
+        if(sp.collides(hero.getBounds())){
+            sp.setCatched(true);
+            game.setScreen(new com.jose.skyfall.Screens.MenuScreen(game));
+        }
+
         for (Obstacle obs : obstacles){
             obs.updatePosition(delta);
 
             if(gameCam.position.y + (gameCam.viewportHeight/2) < obs.getPosition().y)
                 obs.reposition(obs.getPosition().y - (OBSTACLE_SPACING * OBSTACLES_COUNT));
 
-            if(obs.collides(hero.getBounds())) {
+            if(obs.collides(hero.getBounds()) && !obs.isDestroied()) {
+                //TODO alterado
+                if (hero.getSuperPower()){
+                    hero.setSuperPower(false);
+                    obs.destroy();
+                }
                 /*game.screens.pop();
                 game.setScreen(game.screens.peek());*/
-                game.setScreen(new com.jose.skyfall.Screens.MenuScreen(game));
-                break;
+                else{
+                    game.setScreen(new com.jose.skyfall.Screens.MenuScreen(game));
+                    break;
+                }
             }
         }
 
@@ -113,8 +135,13 @@ public class PlayScreen implements Screen {
         hero.render(game.batch);
 
         game.batch.begin();
-        for (Obstacle obstacle : obstacles)
-            game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);
+        //TODO implementado
+        game.batch.draw(sp.getImage(), sp.getPosition().x, sp.getPosition().y);
+        //TODO alterado
+        for (Obstacle obstacle : obstacles){
+            if(!obstacle.isDestroied())
+                game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);
+        }
         game.batch.end();
 
         //hud.stage.draw();
