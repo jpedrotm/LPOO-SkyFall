@@ -3,6 +3,7 @@ package com.jose.skyfall.States;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.jose.skyfall.Logic.Diamond;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -21,8 +22,14 @@ public class PlayScreen implements Screen {
     private static final int OBSTACLES_COUNT = 6;
     private static final int OBSTACLES_INICIAL_DISTANCE=600;
 
-    private static final int SUPERPOWER_SPACING = 1000;
+    private static final int SUPERPOWER_SPACING = 6000;
+    private static final int SUPERPOWER_IINTIAL_DISTANCE = 2000;
 
+    private static final int INCREASE_SCORE_BY_TIME=1;
+    private static final int INCREASE_SCORE_BY_DIAMOND=20;
+
+    private static final int DIAMONDS_COUNT=4;
+    private static final int DIAMONDS_SPACING = 1500;
 
     private SkyFall game;
     private OrthographicCamera gameCam;
@@ -31,6 +38,7 @@ public class PlayScreen implements Screen {
 
     private Hero hero;
     private Array<Obstacle> obstacles;
+    private Array<Diamond> diamonds;
     private SuperPower sp;
     private Background background;
     private HighScores highScores;
@@ -57,7 +65,12 @@ public class PlayScreen implements Screen {
             obstacles.add(new Obstacle((i+1) * OBSTACLE_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
         }
 
-        sp = new SuperPower(SUPERPOWER_SPACING);
+        diamonds=new Array<Diamond>();
+        for(int i=1;i<=DIAMONDS_COUNT;i++) {
+            diamonds.add(new Diamond((i+1) * DIAMONDS_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
+        }
+
+        sp = new SuperPower(SUPERPOWER_SPACING + SUPERPOWER_IINTIAL_DISTANCE);
     }
 
     @Override
@@ -73,11 +86,10 @@ public class PlayScreen implements Screen {
         handleInput(delta);
 
         hero.update(delta);
-        highScores.update();
+        highScores.update(INCREASE_SCORE_BY_TIME);
         hud.update(delta,highScores.getScore());
         gameCam.position.y = hero.getPosition().y - (gameCam.viewportHeight/2)+200;
 
-        //TODO Implementado
         if((gameCam.position.y + (gameCam.viewportHeight/2) < sp.getPosition().y) || sp.getCathed())
             sp.reposition(sp.getPosition().y - SUPERPOWER_SPACING);
 
@@ -86,7 +98,9 @@ public class PlayScreen implements Screen {
             hero.setSuperPower(true);
         }
 
+        //Obstacles----------------------------------------------------------------------------------------
         for (Obstacle obs : obstacles){
+            obs.update(delta);
             obs.updatePosition(delta);
 
             if(gameCam.position.y + (gameCam.viewportHeight/2) < obs.getPosition().y)
@@ -105,6 +119,19 @@ public class PlayScreen implements Screen {
             }
         }
 
+        //Diamonds---------------------------------------------------------------------
+
+        for (Diamond diamond : diamonds){
+            diamond.updatePosition(delta);
+
+            if(gameCam.position.y + (gameCam.viewportHeight/2) < diamond.getPosition().y)
+                diamond.reposition(diamond.getPosition().y - (DIAMONDS_SPACING * DIAMONDS_COUNT));
+
+            if(diamond.collides(hero.getBounds())) {
+                highScores.update(INCREASE_SCORE_BY_DIAMOND);
+                diamond.setCatched(true);
+            }
+        }
 
         gameCam.update();
         background.update(gameCam);
@@ -126,11 +153,17 @@ public class PlayScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(sp.getImage(), sp.getPosition().x, sp.getPosition().y);
-        for (Obstacle obstacle : obstacles){
-            if(!obstacle.isDestroied())
-                game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);
-        }
+        for (Diamond diamond : diamonds){
+            if(!diamond.wasCatched())
+                game.batch.draw(diamond.getImage(),diamond.getPosition().x,diamond.getPosition().y);
+            }
         game.batch.end();
+        for (Obstacle obstacle : obstacles){
+            /*if(!obstacle.isDestroied())
+                game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);*/
+            obstacle.render(game.batch);
+        }
+
 
         hud.stage.draw();
     }

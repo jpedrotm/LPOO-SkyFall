@@ -29,8 +29,9 @@ public class HighScores {
         return score;
     }
 
-    public void update(){
-        score++;
+    public void update(int val){
+
+        score+=val;
     }
 
     public void loadHighscore() {

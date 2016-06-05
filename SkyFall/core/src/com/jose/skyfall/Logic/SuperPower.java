@@ -18,7 +18,7 @@ public class SuperPower {
     private boolean catched;
 
     public SuperPower(float y){
-        image = new Texture("playB.png");
+        image = new Texture("bubble.png");
         rand = new Random();
         position = new Vector2(rand.nextInt(VARIATION), y);
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());

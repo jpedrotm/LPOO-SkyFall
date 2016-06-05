@@ -2,31 +2,28 @@ package com.jose.skyfall.Logic;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.jose.skyfall.Sprites.Animation;
 
 import java.util.Random;
 
 /**
- * Created by Bruno on 31/05/2016.
+ * Created by Jose on 05/06/2016.
  */
-public class Obstacle {
+public class Diamond {
+
     private static final int VARIATION = 859;
     private int XMOVEMENT = 100;
     private boolean movX;
     private Texture image;
-    private Texture textureExplosion;
     private Vector2 position;
     private Rectangle bounds;
     private Random rand;
-    private Animation explosionAnimation;
 
-    private boolean destroied;
+    private boolean catched;
 
-    public Obstacle(float y){
-        image = new Texture("obstaclesBomb.png");
+    public Diamond(float y){
+        image = new Texture("diamondPoint.png");
         rand = new Random();
 
         position = new Vector2(rand.nextInt(VARIATION), y);
@@ -37,22 +34,17 @@ public class Obstacle {
 
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());
 
-        textureExplosion = new Texture("Explosion-Sprite-Sheet.png");
-        explosionAnimation = new Animation(new TextureRegion(textureExplosion),5,0.6f);
-
-        destroied = false;
+        catched = false;
     }
 
     public void render(SpriteBatch batch){
         batch.begin();
-        if (!destroied)
-            batch.draw(image, position.x, position.y);
-        else
-            batch.draw(explosionAnimation.getCurrFrame(),getPosition().x,getPosition().y, 118 ,118);
+        batch.draw(image, position.x, position.y);
         batch.end();
     }
 
     public Vector2 getPosition(){ return position; }
+
     public Texture getImage(){ return image; }
 
     public void reposition(float y){
@@ -63,7 +55,7 @@ public class Obstacle {
         int num = mov.nextInt(5);
         movX = (num == 0);
 
-        destroied = false;
+        catched = false;
     }
 
     public boolean collides(Rectangle hero){
@@ -84,19 +76,11 @@ public class Obstacle {
             XMOVEMENT = -XMOVEMENT;
     }
 
-    //TODO
-    public void destroy(){
-        destroied = true;
-        movX = false;
+    public void setCatched(boolean catched){
+        this.catched=catched;
     }
 
-    //TODO
-    public boolean isDestroied(){
-        return destroied;
-    }
-
-    public void update(float delta){
-        if(destroied)
-            explosionAnimation.update(delta);
+    public boolean wasCatched(){
+        return catched;
     }
 }

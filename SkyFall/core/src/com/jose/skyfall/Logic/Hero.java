@@ -28,10 +28,13 @@ public class Hero {
     private Vector3 velocity;
     private Texture texture;
     private Texture textureAnimation;
+    private Texture textureSuperPowerAnimation;
     private Rectangle bounds;
     private Animation heroAnimation;
+    private Animation superPowerAnimation;
 
-    private boolean superPower;
+    public enum HeroState{NORMAL, SUPER_POWER};
+    private HeroState actualState;
 
     public Hero(int tiledWidth,int tiledHeight){
 
@@ -45,13 +48,19 @@ public class Hero {
         textureAnimation=new Texture("PlayerGreen.png");
         heroAnimation=new Animation(new TextureRegion(textureAnimation),3,0.5f);
 
+        textureSuperPowerAnimation = new Texture("greenPlayerBubble.png");
+        superPowerAnimation = new Animation(new TextureRegion(textureSuperPowerAnimation), 3,0.5f);
+
         //TODO
-        superPower = false;
+        actualState = HeroState.NORMAL;
     }
 
     public void update(float delta){
 
-        heroAnimation.update(delta);
+        if(actualState == HeroState.NORMAL)
+            heroAnimation.update(delta);
+        else
+            superPowerAnimation.update(delta);
 
         updateVolocity();
 
@@ -65,7 +74,10 @@ public class Hero {
 
     public void render(SpriteBatch batch){
         batch.begin();
-        batch.draw(heroAnimation.getCurrFrame(),getPosition().x,getPosition().y,PLAYER_WIDTH,PLAYER_HEIGHT);
+        if(actualState == HeroState.NORMAL)
+            batch.draw(heroAnimation.getCurrFrame(),getPosition().x,getPosition().y,PLAYER_WIDTH,PLAYER_HEIGHT);
+        else
+            batch.draw(superPowerAnimation.getCurrFrame(),getPosition().x,getPosition().y,80,80);
         batch.end();
     }
 
@@ -96,11 +108,14 @@ public class Hero {
 
     //TODO
     public boolean getSuperPower(){
-        return superPower;
+        return (actualState == HeroState.SUPER_POWER);
     }
 
     //TODO
     public void setSuperPower(boolean value){
-        superPower = value;
+        if (value == true)
+            actualState = HeroState.SUPER_POWER;
+        else
+            actualState = HeroState.NORMAL;
     }
 }
