@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.Background;
+import com.jose.skyfall.Logic.Diamond;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.HighScores;
 import com.jose.skyfall.Logic.Obstacle;
@@ -66,6 +67,7 @@ public class PlayScreen implements Screen {
         }
 
         diamonds=new Array<Diamond>();
+
         for(int i=1;i<=DIAMONDS_COUNT;i++) {
             diamonds.add(new Diamond((i+1) * DIAMONDS_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
         }
@@ -163,7 +165,6 @@ public class PlayScreen implements Screen {
                 game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);*/
             obstacle.render(game.batch);
         }
-
 
         hud.stage.draw();
     }

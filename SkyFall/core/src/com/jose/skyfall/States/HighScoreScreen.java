@@ -30,7 +30,6 @@ public class HighScoreScreen implements Screen {
     private SkyFall game;
     private OrthographicCamera highScoreCam;
     private Viewport highScorePort;
-
     private ImageButton backButton;
     private TextureAtlas ButtonsPack;
     private Table table;
@@ -103,6 +102,7 @@ public class HighScoreScreen implements Screen {
             String highscoreString = highscoreF.readString();
             highScore1 = Integer.parseInt(highscoreString);
             Gdx.app.log("existe","existe: "+highScore1);
+
             }
         else{
             highScore1 = 0;
