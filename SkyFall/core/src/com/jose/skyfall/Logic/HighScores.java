@@ -10,9 +10,9 @@ import java.io.IOException;
  */
 public class HighScores {
 
+
     private String HIGHSCORE_FILE_NAME="world";
     private String HIGHSCORE_FILE_EXTENSION=".dat";
-
     private int highscore;
     private int score;
     private int world;
@@ -29,8 +29,9 @@ public class HighScores {
         return score;
     }
 
-    public void update(){
-        score++;
+    public void update(int val){
+
+        score+=val;
     }
 
     public void loadHighscore() {

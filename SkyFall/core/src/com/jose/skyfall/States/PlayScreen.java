@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.Background;
+import com.jose.skyfall.Logic.Diamond;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.HighScores;
 import com.jose.skyfall.Logic.Obstacle;
@@ -20,6 +21,10 @@ public class PlayScreen implements Screen {
     private static final int OBSTACLE_SPACING = 350;
     private static final int OBSTACLES_COUNT = 6;
     private static final int OBSTACLES_INICIAL_DISTANCE=600;
+    private static final int INCREASE_SCORE_BY_TIME=1;
+    private static final int INCREASE_SCORE_BY_DIAMOND=20;
+
+    private static final int DIAMONDS_COUNT=4;
 
     private static final int SUPERPOWER_SPACING = 1000;
 
@@ -31,6 +36,7 @@ public class PlayScreen implements Screen {
 
     private Hero hero;
     private Array<Obstacle> obstacles;
+    private Array<Diamond> diamonds;
     private SuperPower sp;
     private Background background;
     private HighScores highScores;
@@ -57,6 +63,12 @@ public class PlayScreen implements Screen {
             obstacles.add(new Obstacle((i+1) * OBSTACLE_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
         }
 
+        diamonds=new Array<Diamond>();
+        for(int i=1;i<=DIAMONDS_COUNT;i++)
+        {
+            diamonds.add(new Diamond((i+1) * 600+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
+        }
+
         sp = new SuperPower(SUPERPOWER_SPACING);
     }
 
@@ -73,11 +85,10 @@ public class PlayScreen implements Screen {
         handleInput(delta);
 
         hero.update(delta);
-        highScores.update();
+        highScores.update(INCREASE_SCORE_BY_TIME);
         hud.update(delta,highScores.getScore());
         gameCam.position.y = hero.getPosition().y - (gameCam.viewportHeight/2)+200;
 
-        //TODO Implementado
         if((gameCam.position.y + (gameCam.viewportHeight/2) < sp.getPosition().y) || sp.getCathed())
             sp.reposition(sp.getPosition().y - SUPERPOWER_SPACING);
 
@@ -85,6 +96,8 @@ public class PlayScreen implements Screen {
             sp.setCatched(true);
             hero.setSuperPower(true);
         }
+
+        //Obstacles----------------------------------------------------------------------------------------
 
         for (Obstacle obs : obstacles){
             obs.updatePosition(delta);
@@ -102,6 +115,20 @@ public class PlayScreen implements Screen {
                     game.setScreen(new ChooseWorldScreen(game));
                     break;
                 }
+            }
+        }
+
+        //Diamonds---------------------------------------------------------------------
+
+        for (Diamond diamond : diamonds){
+            diamond.updatePosition(delta);
+
+            if(gameCam.position.y + (gameCam.viewportHeight/2) < diamond.getPosition().y)
+                diamond.reposition(diamond.getPosition().y - (OBSTACLE_SPACING * OBSTACLES_COUNT));
+
+            if(diamond.collides(hero.getBounds())) {
+                highScores.update(INCREASE_SCORE_BY_DIAMOND);
+                diamond.setCatched(true);
             }
         }
 
@@ -130,6 +157,12 @@ public class PlayScreen implements Screen {
             if(!obstacle.isDestroied())
                 game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);
         }
+
+        for (Diamond diamond : diamonds){
+            if(!diamond.wasCatched())
+                game.batch.draw(diamond.getImage(),diamond.getPosition().x,diamond.getPosition().y);
+        }
+
         game.batch.end();
 
         hud.stage.draw();

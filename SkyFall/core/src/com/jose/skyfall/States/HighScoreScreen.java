@@ -2,13 +2,18 @@ package com.jose.skyfall.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,12 +24,21 @@ import com.jose.skyfall.Logic.SkyFall;
  */
 public class HighScoreScreen implements Screen {
 
+    private String HIGHSCORE_FILE_NAME="world";
+    private String HIGHSCORE_FILE_EXTENSION=".dat";
+
     private SkyFall game;
     private OrthographicCamera highScoreCam;
     private Viewport highScorePort;
-
     private ImageButton backButton;
     private TextureAtlas ButtonsPack;
+    private Table table;
+    private Label highScoreLabel1;
+    private Label highScoreLabel2;
+    private Label highScoreLabel3;
+    private int highScore1;
+    private int highScore2;
+    private int highScore3;
     private Skin skin;
     private ImageButton.ImageButtonStyle style;
     private Texture background;
@@ -55,7 +69,24 @@ public class HighScoreScreen implements Screen {
         backButton = new ImageButton(style);
         backButton.setPosition(20,height-80);
 
+        loadHighScores();
+
+        highScoreLabel1 = new Label(String.format("%06d", highScore1), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        highScoreLabel1.setFontScale(1);
+        highScoreLabel1.setPosition(width/2-30,height/2+100);
+
+        highScoreLabel2 = new Label(String.format("%06d", highScore2), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        highScoreLabel2.setFontScale(1);
+        highScoreLabel2.setPosition(width/2-30,height/2-35);
+
+        highScoreLabel3 = new Label(String.format("%06d", highScore3), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        highScoreLabel3.setFontScale(1);
+        highScoreLabel3.setPosition(width/2-30,height/2-170);
+
         stage.addActor(backButton);
+        stage.addActor(highScoreLabel1);
+        stage.addActor(highScoreLabel2);
+        stage.addActor(highScoreLabel3);
 
     }
 
@@ -64,11 +95,51 @@ public class HighScoreScreen implements Screen {
 
     }
 
+    public void loadHighScores(){
+
+        FileHandle highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + 1 + HIGHSCORE_FILE_EXTENSION);
+
+        if(highscoreF.exists()) {
+            String highscoreString = highscoreF.readString();
+            highScore1 = Integer.parseInt(highscoreString);
+            Gdx.app.log("existe","existe: "+highScore1);
+        }
+        else{
+            highScore1 = 0;
+            Gdx.app.log("highscore load: ","highscore load: "+highScore1);
+        }
+
+        highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + 2 + HIGHSCORE_FILE_EXTENSION);
+
+        if(highscoreF.exists()) {
+            String highscoreString = highscoreF.readString();
+            highScore2 = Integer.parseInt(highscoreString);
+            Gdx.app.log("existe","existe: "+highScore2);
+        }
+        else{
+            highScore2 = 0;
+            Gdx.app.log("highscore load: ","highscore load: "+highScore2);
+        }
+
+        highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + 3 + HIGHSCORE_FILE_EXTENSION);
+
+        if(highscoreF.exists()) {
+            String highscoreString = highscoreF.readString();
+            highScore3 = Integer.parseInt(highscoreString);
+            Gdx.app.log("existe","existe: "+highScore3);
+        }
+        else{
+            highScore3 = 0;
+            Gdx.app.log("highscore load: ","highscore load: "+highScore3);
+        }
+    }
+
     public void handleInput(float delta){
 
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("OLA","OLA");
                 Screen screen = new MenuScreen(game);
                 game.setScreen(screen);
                 dispose();
