@@ -32,7 +32,6 @@ public class Animation {
 
     public void update(float delta) {
         currFrameTime += delta;
-        Gdx.app.log("OLA","TOP"+currFrame);
         if(currFrameTime > maxFrameTime)
         {
             currFrame++;

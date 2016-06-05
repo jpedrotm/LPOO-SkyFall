@@ -11,8 +11,8 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useGyroscope = true;
-		config.useAccelerometer = false;
+		config.useGyroscope = false;
+		config.useAccelerometer = true;
 		config.useCompass = false;
 		config.useImmersiveMode = true;
 		initialize(new SkyFall(), config);

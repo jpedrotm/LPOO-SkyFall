@@ -52,9 +52,14 @@ public class Hero {
     public void update(float delta){
 
         heroAnimation.update(delta);
-        if (position.x + velocity.x > 0 && position.x + velocity.x < 913)
-            position.add(velocity.x, 0, 0);
-        position.add(0, MOVEMENT * delta , 0);
+
+        updateVolocity();
+
+        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)){
+            float accelX = Gdx.input.getAccelerometerX();
+            move(accelX * 20,delta);
+        }
+
         bounds.setPosition(position.x, position.y);
     }
 
@@ -68,12 +73,13 @@ public class Hero {
         return position;
     }
 
-    public TextureRegion getTexture() {
-        return heroAnimation.getCurrFrame();
-    }
+    public void move (float x,float delta){
 
-    public void move (float x){
-        velocity.x = x;
+        velocity.x = -x;
+        if (position.x + velocity.x > 62 && position.x + velocity.x+texture.getWidth() <1054)
+            position.add(velocity.x, 0, 0);
+
+        position.add(0, MOVEMENT * delta , 0);
     }
 
     public Rectangle getBounds(){
@@ -85,7 +91,7 @@ public class Hero {
     }
 
     public void updateVolocity(){
-        MOVEMENT -= 0.2f;
+        MOVEMENT -= 0.4f;
     }
 
     //TODO
