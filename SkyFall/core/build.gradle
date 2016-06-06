@@ -11,5 +11,7 @@ eclipse.project {
 }
 dependencies {
     compile 'com.badlogicgames.gdx:gdx-backend-android:1.9.2'
+    compile 'junit:junit:4.13-SNAPSHOT'
+    compile 'com.badlogicgames.gdx:gdx-backend-headless:1.9.2'
 }
 

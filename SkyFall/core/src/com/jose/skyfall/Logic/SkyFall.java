@@ -6,7 +6,7 @@ import com.jose.skyfall.States.MenuScreen;
 import com.jose.skyfall.States.SingletonMenu;
 
 public class SkyFall extends Game {
-	
+
 	public static final int V_WIDTH=1054;
 	public static final int V_HEIGHT=1900;
 	public SpriteBatch batch;
