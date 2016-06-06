@@ -2,9 +2,14 @@ package com.jose.skyfall.States;
 
 import com.jose.skyfall.Logic.SkyFall;
 
-public class SingletonState {
+/**
+ * Created by Bruno on 06/06/2016.
+ */
 
-    public enum ScreenState{MENU,GAME,HIGHSCORE,CHOOSE_WORLD_SCREEN}
+
+public class SingletonMenu {
+
+    public enum Screens{MENU,GAME,HIGHSCORE,CHOOSE_WORLD_SCREEN}
 
     private static SkyFall game;
     private static MenuScreen menu;
@@ -12,13 +17,13 @@ public class SingletonState {
     private static ChooseWorldScreen chooseWorldScreen;
     private static HighScoreScreen highScoreScreen;
 
-    private static SingletonState ourInstance = new SingletonState();
+    private static SingletonMenu ourInstance = new SingletonMenu();
 
-    public static SingletonState getInstance() {
+    public static SingletonMenu getInstance() {
         return ourInstance;
     }
 
-    private SingletonState() {
+    private SingletonMenu() {
         menu = new MenuScreen(game);
         playMode=new PlayScreen(game);
         chooseWorldScreen = new ChooseWorldScreen(game);
@@ -29,7 +34,7 @@ public class SingletonState {
         game = g;
     }
 
-    public void changeState(ScreenState screenType) {
+    public void changeState(Screens screenType) {
 
         switch (screenType) {
             case MENU:
