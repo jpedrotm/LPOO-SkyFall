@@ -111,11 +111,13 @@ public class PlayScreen implements Screen {
             if(obs.collides(hero.getBounds()) && !obs.isDestroied()) {
                 if (hero.getSuperPower()){
                     hero.setSuperPower(false);
+                    sp.setCatched(false);
                     obs.destroy();
                 }
                 else{
                     highScores.saveScore();
                     game.setScreen(new ChooseWorldScreen(game));
+                    dispose();
                     break;
                 }
             }
@@ -146,7 +148,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //renderer.render();
         background.render();
 
         game.batch.setProjectionMatrix(gameCam.combined);
@@ -161,8 +162,6 @@ public class PlayScreen implements Screen {
             }
         game.batch.end();
         for (Obstacle obstacle : obstacles){
-            /*if(!obstacle.isDestroied())
-                game.batch.draw(obstacle.getImage(), obstacle.getPosition().x, obstacle.getPosition().y);*/
             obstacle.render(game.batch);
         }
 
@@ -193,5 +192,6 @@ public class PlayScreen implements Screen {
     public void dispose() {
 
         hero.dispose();
+
     }
 }

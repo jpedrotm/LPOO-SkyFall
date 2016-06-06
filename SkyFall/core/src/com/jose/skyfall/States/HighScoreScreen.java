@@ -67,7 +67,7 @@ public class HighScoreScreen implements Screen {
         style.up = skin.getDrawable("BackButton");
         style.down = skin.getDrawable("BackButton");
         backButton = new ImageButton(style);
-        backButton.setPosition(20,height-80);
+        backButton.setPosition(20,height-100);
 
         loadHighScores();
 

@@ -1,5 +1,6 @@
 package com.jose.skyfall.Logic;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,6 +20,7 @@ public class Diamond {
     private Vector2 position;
     private Rectangle bounds;
     private Random rand;
+    private Music music;
 
     private boolean catched;
 
@@ -35,6 +37,7 @@ public class Diamond {
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());
 
         catched = false;
+        music= SkyFall.manager.get("audio/diamondCatchedSound.ogg");
     }
 
     public void render(SpriteBatch batch){
@@ -77,6 +80,7 @@ public class Diamond {
     }
 
     public void setCatched(boolean catched){
+        music.play();
         this.catched=catched;
     }
 
