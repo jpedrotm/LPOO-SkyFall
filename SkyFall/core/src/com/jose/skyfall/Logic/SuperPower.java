@@ -2,7 +2,6 @@ package com.jose.skyfall.Logic;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -54,5 +53,10 @@ public class SuperPower {
         }
 
         catched = value;
+    }
+
+    public void dispose(){
+        image.dispose();
+        music.dispose();
     }
 }

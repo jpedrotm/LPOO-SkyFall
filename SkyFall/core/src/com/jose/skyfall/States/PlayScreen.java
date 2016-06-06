@@ -2,6 +2,7 @@ package com.jose.skyfall.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.jose.skyfall.Logic.Diamond;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.Background;
-import com.jose.skyfall.Logic.Diamond;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.HighScores;
 import com.jose.skyfall.Logic.Obstacle;
@@ -51,25 +51,28 @@ public class PlayScreen implements Screen {
         gameCam=new OrthographicCamera();
         gamePort=new FitViewport(SkyFall.V_WIDTH,SkyFall.V_HEIGHT,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
 
-        highScores=new HighScores(1);
+        highScores=new HighScores(game.getWorld());
 
         hud=new Hud(game.batch,highScores.getScore());
 
         gameCam.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
 
-        background=new Background("world1.tmx");
+        Gdx.app.log("OLA","OLA"+game.getWorld());
+        background=new Background("world"+game.getWorld()+".tmx");
 
         hero = new Hero(background.getTiledWidth(),background.getTiledHeight());
         obstacles = new Array<Obstacle>();
 
+        Gdx.app.log("OLA","OLA"+background.getTiledHeight());
+
         for (int i = 1; i <= OBSTACLES_COUNT; i++){
-            obstacles.add(new Obstacle((i+1) * OBSTACLE_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
-        }
+            obstacles.add(new Obstacle(background.getTiledHeight()-OBSTACLES_INICIAL_DISTANCE-i*OBSTACLE_SPACING));
+    }
 
         diamonds=new Array<Diamond>();
 
         for(int i=1;i<=DIAMONDS_COUNT;i++) {
-            diamonds.add(new Diamond((i+1) * DIAMONDS_SPACING+background.getTiledWidth()+OBSTACLES_INICIAL_DISTANCE*2));
+            diamonds.add(new Diamond(background.getTiledHeight()-DIAMONDS_SPACING*i));
         }
 
         sp = new SuperPower(SUPERPOWER_SPACING + SUPERPOWER_IINTIAL_DISTANCE);
@@ -134,6 +137,8 @@ public class PlayScreen implements Screen {
             if(diamond.collides(hero.getBounds())) {
                 highScores.update(INCREASE_SCORE_BY_DIAMOND);
                 diamond.setCatched(true);
+                if(game.getIsMusicOn())
+                    SkyFall.manager.get("audio/diamondCatchedSound.wav",Sound.class).play();
             }
         }
 
@@ -192,6 +197,15 @@ public class PlayScreen implements Screen {
     public void dispose() {
 
         hero.dispose();
-
+        background.dispose();
+        for(Diamond ds : diamonds)
+        {
+            ds.dispose();
+        }
+        for(Obstacle obs: obstacles)
+        {
+            obs.dispose();
+        }
+        sp.dispose();
     }
 }

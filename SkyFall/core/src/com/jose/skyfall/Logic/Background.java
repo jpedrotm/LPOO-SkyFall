@@ -42,4 +42,9 @@ public class Background {
     public void render(){
         renderer.render();
     }
+
+    public void dispose(){
+        map.dispose();
+        renderer.dispose();
+    }
 }

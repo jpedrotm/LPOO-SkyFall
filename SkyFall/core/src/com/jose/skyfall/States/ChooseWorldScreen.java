@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.SkyFall;
-import com.jose.skyfall.States.PlayScreen;
 
 /**
  * Created by Jose on 02/06/2016.
@@ -98,6 +97,7 @@ public class ChooseWorldScreen implements Screen {
         worldButton1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setWorld(1);
                 Screen screen = new PlayScreen(game);
                 game.setScreen(screen);
                 dispose();
@@ -107,6 +107,7 @@ public class ChooseWorldScreen implements Screen {
         worldButton2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setWorld(2);
                 Screen screen = new PlayScreen(game);
                 game.setScreen(screen);
                 dispose();
@@ -116,6 +117,7 @@ public class ChooseWorldScreen implements Screen {
         worldButton3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setWorld(3);
                 Screen screen = new PlayScreen(game);
                 game.setScreen(screen);
                 dispose();

@@ -2,7 +2,7 @@ package com.jose.skyfall.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.SkyFall;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

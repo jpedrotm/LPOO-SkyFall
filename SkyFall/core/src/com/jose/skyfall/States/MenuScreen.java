@@ -2,6 +2,7 @@ package com.jose.skyfall.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -26,13 +27,16 @@ public class MenuScreen implements Screen {
     private ImageButton playButton;
     private ImageButton highScoresButton;
     private ImageButton exitButton;
+    private ImageButton musicButton;
     private TextureAtlas ButtonsPack;
+    private TextureAtlas musicPack;
     private Skin skin;
     private ImageButton.ImageButtonStyle style;
     private Texture background;
     private Stage stage;
     private float width;
     private float height;
+    private Music music;
 
     public MenuScreen(SkyFall game){
 
@@ -47,10 +51,16 @@ public class MenuScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
+        music=SkyFall.manager.get("audio/gameMusic.ogg",Music.class);
+        music.setLooping(true);
+        music.play();
+
         //buttons
         ButtonsPack = new TextureAtlas("MenuButtons.atlas");
+        musicPack= new TextureAtlas("ChooseWorldButtons.pack");
         skin = new Skin();
         skin.addRegions(ButtonsPack);
+        skin.addRegions(musicPack);
         style = new ImageButton.ImageButtonStyle();
 
         style = new ImageButton.ImageButtonStyle();
@@ -71,10 +81,17 @@ public class MenuScreen implements Screen {
         exitButton = new ImageButton(style);
         exitButton.setPosition(width/2-playButton.getWidth()/2, height/2-120);
 
+        style = new ImageButton.ImageButtonStyle();
+        style.up = skin.getDrawable("BackButton");
+        style.down = skin.getDrawable("BackButton");
+        musicButton = new ImageButton(style);
+        musicButton.setPosition(width/2-playButton.getWidth()/2, height/2-300);
+
 
         stage.addActor(playButton);
         stage.addActor(highScoresButton);
         stage.addActor(exitButton);
+        stage.addActor(musicButton);
 
     }
 
@@ -83,6 +100,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.stop();
                 Screen screen = new ChooseWorldScreen(game);
                 game.setScreen(screen);
                 dispose();
@@ -103,6 +121,21 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 Gdx.app.exit();
+            }
+        });
+
+        musicButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(game.getIsMusicOn())
+                {
+                    game.setIsMusicOn(false);
+                    music.stop();
+                }
+                else {
+                    game.setIsMusicOn(true);
+                    music.play();
+                }
             }
         });
     }
