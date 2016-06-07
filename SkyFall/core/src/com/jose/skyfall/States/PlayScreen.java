@@ -43,6 +43,8 @@ public class PlayScreen implements Screen {
     private SuperPower sp;
     private Background background;
     private HighScores highScores;
+    private Sound diamondCatchedSound;
+    private Sound explosionSound;
 
 
 
@@ -57,13 +59,10 @@ public class PlayScreen implements Screen {
 
         gameCam.position.set(gamePort.getWorldWidth()/2,gamePort.getWorldHeight()/2,0);
 
-        Gdx.app.log("OLA","OLA"+game.getWorld());
         background=new Background("world"+game.getWorld()+".tmx");
 
         hero = new Hero(background.getTiledWidth(),background.getTiledHeight());
         obstacles = new Array<Obstacle>();
-
-        Gdx.app.log("OLA","OLA"+background.getTiledHeight());
 
         for (int i = 1; i <= OBSTACLES_COUNT; i++){
             obstacles.add(new Obstacle(background.getTiledHeight()-OBSTACLES_INICIAL_DISTANCE-i*OBSTACLE_SPACING));
@@ -75,7 +74,10 @@ public class PlayScreen implements Screen {
             diamonds.add(new Diamond(background.getTiledHeight()-DIAMONDS_SPACING*i));
         }
 
-        sp = new SuperPower(SUPERPOWER_SPACING + SUPERPOWER_IINTIAL_DISTANCE);
+        sp = new SuperPower(background.getTiledHeight() - SUPERPOWER_IINTIAL_DISTANCE-SUPERPOWER_SPACING);
+
+        diamondCatchedSound=Gdx.audio.newSound(Gdx.files.internal("audio/diamondCatchedSound.wav"));
+        explosionSound=Gdx.audio.newSound(Gdx.files.internal("audio/explosionSound.wav"));
     }
 
     @Override
@@ -113,6 +115,8 @@ public class PlayScreen implements Screen {
 
             if(obs.collides(hero.getBounds()) && !obs.isDestroied()) {
                 if (hero.getSuperPower()){
+                    if(game.getIsMusicOn())
+                        explosionSound.play();
                     hero.setSuperPower(false);
                     sp.setCatched(false);
                     obs.destroy();
@@ -138,7 +142,7 @@ public class PlayScreen implements Screen {
                 highScores.update(INCREASE_SCORE_BY_DIAMOND);
                 diamond.setCatched(true);
                 if(game.getIsMusicOn())
-                    SkyFall.manager.get("audio/diamondCatchedSound.wav",Sound.class).play();
+                    diamondCatchedSound.play();
             }
         }
 

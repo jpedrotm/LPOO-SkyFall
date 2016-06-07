@@ -1,6 +1,8 @@
 package com.jose.skyfall.Logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +19,6 @@ public class SuperPower {
     private Rectangle bounds;
     private Random rand;
     private boolean catched;
-    private Music music;
 
     public SuperPower(float y){
         image = new Texture("bubble.png");
@@ -25,7 +26,6 @@ public class SuperPower {
         position = new Vector2(rand.nextInt(VARIATION), y);
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());
         catched = false;
-        music= SkyFall.manager.get("audio/superPowerSong.ogg");
     }
 
     public Vector2 getPosition(){ return position; }
@@ -46,17 +46,10 @@ public class SuperPower {
 
     public void setCatched(boolean value){
 
-        if(value)
-            music.play();
-        else{
-            music.stop();
-        }
-
         catched = value;
     }
 
     public void dispose(){
         image.dispose();
-        music.dispose();
     }
 }

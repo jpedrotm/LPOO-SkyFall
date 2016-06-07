@@ -64,10 +64,10 @@ public class HighScoreScreen implements Screen {
         style = new ImageButton.ImageButtonStyle();
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("BackButton");
-        style.down = skin.getDrawable("BackButton");
+        style.up = skin.getDrawable("homeButton");
+        style.down = skin.getDrawable("homeButtonPressed");
         backButton = new ImageButton(style);
-        backButton.setPosition(20,height-100);
+        backButton.setPosition(20,height-80);
 
         loadHighScores();
 
@@ -87,6 +87,19 @@ public class HighScoreScreen implements Screen {
         stage.addActor(highScoreLabel1);
         stage.addActor(highScoreLabel2);
         stage.addActor(highScoreLabel3);
+
+        loadListeneres();
+    }
+
+    public void loadListeneres(){
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Screen screen = new MenuScreen(game);
+                game.setScreen(screen);
+                dispose();
+            }
+        });
     }
 
     @Override
@@ -101,12 +114,10 @@ public class HighScoreScreen implements Screen {
         if(highscoreF.exists()) {
             String highscoreString = highscoreF.readString();
             highScore1 = Integer.parseInt(highscoreString);
-            Gdx.app.log("existe","existe: "+highScore1);
 
             }
         else{
             highScore1 = 0;
-            Gdx.app.log("highscore load: ","highscore load: "+highScore1);
             }
 
                highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + 2 + HIGHSCORE_FILE_EXTENSION);
@@ -114,11 +125,9 @@ public class HighScoreScreen implements Screen {
             if(highscoreF.exists()) {
             String highscoreString = highscoreF.readString();
             highScore2 = Integer.parseInt(highscoreString);
-            Gdx.app.log("existe","existe: "+highScore2);
              }
         else{
             highScore2 = 0;
-            Gdx.app.log("highscore load: ","highscore load: "+highScore2);
             }
 
                 highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + 3 + HIGHSCORE_FILE_EXTENSION);
@@ -126,25 +135,14 @@ public class HighScoreScreen implements Screen {
         if(highscoreF.exists()) {
             String highscoreString = highscoreF.readString();
             highScore3 = Integer.parseInt(highscoreString);
-            Gdx.app.log("existe","existe: "+highScore3);
             }
         else{
             highScore3 = 0;
-            Gdx.app.log("highscore load: ","highscore load: "+highScore3);
             }
         }
 
     public void handleInput(float delta){
 
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("OLA","OLA");
-                Screen screen = new MenuScreen(game);
-                game.setScreen(screen);
-                dispose();
-            }
-        });
     }
 
     public void update(float delta){

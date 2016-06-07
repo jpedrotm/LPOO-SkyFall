@@ -69,31 +69,27 @@ public class ChooseWorldScreen implements Screen {
         worldButton2.setPosition(width/2-worldButton2.getWidth()/2+40,height/2+ADJUST_WORLD2IMAGE_HEIGHT);
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("worldImage2");
-        style.down = skin.getDrawable("worldImage2");
+        style.up = skin.getDrawable("worldImage3");
+        style.down = skin.getDrawable("worldImage3");
         worldButton3 = new ImageButton(style);
         worldButton3.setPosition(width/2-worldButton3.getWidth()/2-40, height/2+ADJUST_WORLD3IMAGE_HEIGHT);
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("BackButton");
-        style.down = skin.getDrawable("BackButton");
+        style.up = skin.getDrawable("homeButton");
+        style.down = skin.getDrawable("homeButtonPressed");
         backButton = new ImageButton(style);
-        backButton.setPosition(20,height-100);
+        backButton.setPosition(20,height-80);
 
 
         stage.addActor(worldButton1);
         stage.addActor(worldButton2);
         stage.addActor(worldButton3);
         stage.addActor(backButton);
+
+        loadListeneres();
     }
 
-    @Override
-    public void show() {
-
-    }
-
-    public void handleInput(float delta){
-
+    public void loadListeneres(){
         worldButton1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -132,6 +128,14 @@ public class ChooseWorldScreen implements Screen {
                 dispose();
             }
         });
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    public void handleInput(float delta){
 
     }
     public void update(float delta){

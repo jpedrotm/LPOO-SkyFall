@@ -84,13 +84,11 @@ public class Obstacle {
             XMOVEMENT = -XMOVEMENT;
     }
 
-    //TODO
     public void destroy(){
         destroied = true;
         movX = false;
     }
 
-    //TODO
     public boolean isDestroied(){
         return destroied;
     }
@@ -98,5 +96,9 @@ public class Obstacle {
     public void update(float delta){
         if(destroied)
             explosionAnimation.update(delta);
+    }
+
+    public void setMovX(boolean val){
+        movX=true;
     }
 }

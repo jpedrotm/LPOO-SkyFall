@@ -51,41 +51,38 @@ public class MenuScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
-        music=SkyFall.manager.get("audio/gameMusic.ogg",Music.class);
-        music.setLooping(true);
+        music=Gdx.audio.newMusic(Gdx.files.internal("audio/gameMusic.ogg"));
         music.play();
 
         //buttons
-        ButtonsPack = new TextureAtlas("MenuButtons.atlas");
-        musicPack= new TextureAtlas("ChooseWorldButtons.pack");
+        ButtonsPack = new TextureAtlas("menuButtons1.pack");
         skin = new Skin();
         skin.addRegions(ButtonsPack);
-        skin.addRegions(musicPack);
         style = new ImageButton.ImageButtonStyle();
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("Play");
-        style.down = skin.getDrawable("Play");
+        style.up = skin.getDrawable("playButton");
+        style.down = skin.getDrawable("playButtonPressed");
         playButton = new ImageButton(style);
         playButton.setPosition(width/2-playButton.getWidth()/2,height/2+80);
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("Scores");
-        style.down = skin.getDrawable("Scores");
+        style.up = skin.getDrawable("highscoreButton");
+        style.down = skin.getDrawable("highscoreButtonPressed");
         highScoresButton = new ImageButton(style);
         highScoresButton.setPosition(width/2-playButton.getWidth()/2,height/2-20);
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("Exit");
-        style.down = skin.getDrawable("Exit");
+        style.up = skin.getDrawable("exitButton");
+        style.down = skin.getDrawable("exitButtonPressed");
         exitButton = new ImageButton(style);
-        exitButton.setPosition(width/2-playButton.getWidth()/2, height/2-120);
+        exitButton.setPosition(width/2-playButton.getWidth()/2, height/2-220);
 
         style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("BackButton");
-        style.down = skin.getDrawable("BackButton");
+        style.up = skin.getDrawable("musicButtonActive");
+        style.down = skin.getDrawable("musicButtonDisable");
         musicButton = new ImageButton(style);
-        musicButton.setPosition(width/2-playButton.getWidth()/2, height/2-300);
+        musicButton.setPosition(width/2-playButton.getWidth()/2, height/2-120);
 
 
         stage.addActor(playButton);
@@ -93,10 +90,11 @@ public class MenuScreen implements Screen {
         stage.addActor(exitButton);
         stage.addActor(musicButton);
 
+        loadListeneres();
+
     }
 
-    public void handleInput(float delta){
-
+    public void loadListeneres(){
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -129,6 +127,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(game.getIsMusicOn())
                 {
+                    Gdx.app.log("OLA","OLA");
                     game.setIsMusicOn(false);
                     music.stop();
                 }
@@ -138,6 +137,10 @@ public class MenuScreen implements Screen {
                 }
             }
         });
+    }
+
+    public void handleInput(float delta){
+
     }
 
     public void update(float delta){

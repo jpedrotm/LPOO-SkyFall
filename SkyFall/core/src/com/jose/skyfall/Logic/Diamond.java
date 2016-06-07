@@ -14,6 +14,8 @@ public class Diamond {
 
     private static final int VARIATION = 859;
     private int XMOVEMENT = 100;
+    private int DIAMOND_LEFT_DISTANCE=62;
+
     private boolean movX;
     private Texture image;
     private Vector2 position;
@@ -26,7 +28,7 @@ public class Diamond {
         image = new Texture("diamondPoint.png");
         rand = new Random();
 
-        position = new Vector2(rand.nextInt(VARIATION), y);
+        position = new Vector2(rand.nextInt(VARIATION)+DIAMOND_LEFT_DISTANCE, y);
 
         Random mov = new Random();
         int num = mov.nextInt(5);
@@ -83,6 +85,10 @@ public class Diamond {
 
     public boolean wasCatched(){
         return catched;
+    }
+
+    public void setMovX(boolean val){
+        movX=true;
     }
 
 
