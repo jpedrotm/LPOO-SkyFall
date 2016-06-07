@@ -109,7 +109,9 @@ public class Obstacle {
      * Disposes the obstacle texture
      */
     public void dispose(){
+
         image.dispose();
+        textureExplosion.dispose();
     }
 
     /**

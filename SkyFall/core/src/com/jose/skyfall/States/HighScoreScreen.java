@@ -30,9 +30,9 @@ public class HighScoreScreen implements Screen {
     private SkyFall game;
     private OrthographicCamera highScoreCam;
     private Viewport highScorePort;
+
     private ImageButton backButton;
     private TextureAtlas ButtonsPack;
-    private Table table;
     private Label highScoreLabel1;
     private Label highScoreLabel2;
     private Label highScoreLabel3;

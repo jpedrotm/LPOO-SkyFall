@@ -46,4 +46,7 @@ public class Animation {
         return frames.get(currFrame);
     }
 
+    public void dispose(){
+    }
+
 }

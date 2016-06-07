@@ -89,6 +89,7 @@ public class SuperPower {
      * disposes the super power texture
      */
     public void dispose(){
+
         image.dispose();
     }
 }

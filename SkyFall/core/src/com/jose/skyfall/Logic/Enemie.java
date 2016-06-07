@@ -111,7 +111,10 @@ public class Enemie {
      * Disposes the enemie texture.
      */
     public void dispose(){
+
         image.dispose();
+        textureExplosion.dispose();
+        enemieTexture.dispose();
     }
 
     /**

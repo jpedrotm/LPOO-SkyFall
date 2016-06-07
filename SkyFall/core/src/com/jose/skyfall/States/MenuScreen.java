@@ -190,5 +190,6 @@ public class MenuScreen implements Screen {
         stage.dispose();
         ButtonsPack.dispose();
         skin.dispose();
+        music.dispose();
     }
 }

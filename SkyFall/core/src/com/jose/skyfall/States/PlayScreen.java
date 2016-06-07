@@ -254,6 +254,12 @@ public class PlayScreen implements Screen {
         {
             obs.dispose();
         }
+        for(Enemie enemie: enemies)
+        {
+            enemie.dispose();
+        }
         sp.dispose();
+        diamondCatchedSound.dispose();
+        explosionSound.dispose();
     }
 }
