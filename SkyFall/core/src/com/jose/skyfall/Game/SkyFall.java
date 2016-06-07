@@ -1,9 +1,6 @@
-package com.jose.skyfall.Logic;
+package com.jose.skyfall.Game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jose.skyfall.States.MenuScreen;
 

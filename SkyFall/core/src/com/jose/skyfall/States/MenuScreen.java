@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.Game.SkyFall;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +29,6 @@ public class MenuScreen implements Screen {
     private ImageButton exitButton;
     private ImageButton musicButton;
     private TextureAtlas ButtonsPack;
-    private TextureAtlas musicPack;
     private Skin skin;
     private ImageButton.ImageButtonStyle style;
     private Texture background;

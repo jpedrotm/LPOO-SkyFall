@@ -11,12 +11,21 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
  */
 public class Background {
 
+    /** Loader of game's map */
     private TmxMapLoader mapLoader;
+    /** Game Map */
     private TiledMap map;
+    /** Map's renderer */
     private OrthogonalTiledMapRenderer renderer;
+    /** Map's height */
     private int tiledHeight;
+    /** Map's width */
     private int tiledWidth;
 
+    /**
+     * Background constructor
+     * @param worldName name of the tmx file that contains the map
+     */
     public Background(String worldName){
         mapLoader = new TmxMapLoader();
         map=mapLoader.load(worldName);
@@ -27,22 +36,40 @@ public class Background {
         tiledWidth=prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class);
     }
 
+    /**
+     * Returns map's width
+     * @return Map's width
+     */
     public int getTiledWidth(){
         return tiledWidth;
     }
 
+    /**
+     * Returns map's height
+     * @return Map's height
+     */
     public int getTiledHeight(){
         return tiledHeight;
     }
 
+    /**
+     * Updates the map's pixels that are going to be drawn
+     * @param camera
+     */
     public void update(OrthographicCamera camera){
         renderer.setView(camera);
     }
 
+    /**
+     * Draws the visible part of the Map
+     */
     public void render(){
         renderer.render();
     }
 
+    /**
+     * Disposes the Map
+     */
     public void dispose(){
         map.dispose();
         renderer.dispose();

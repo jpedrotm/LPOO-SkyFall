@@ -9,20 +9,23 @@ import com.jose.skyfall.Sprites.Animation;
 
 import java.util.Random;
 
-/**
- * Created by Bruno on 31/05/2016.
- */
-public class Obstacle {
+public class Enemie {
+
+    /** Enemie texture width.*/
+    private static final int ENEMIE_WIDTH=50;
+    /** Enemie texture height. */
+    private static final int ENEMIE_HEIGHT=55;
+
     /** Variation of the random value in the x axis */
     private static final int VARIATION = 859;
     /** Velocity in the x axis  */
-    private int XMOVEMENT = 100;
-    /** Movement in the x axis */
-    private boolean movX;
+    private static final int SPEED_Y=250;
     /** Obstacle texture */
     private Texture image;
     /** Explosion texture */
     private Texture textureExplosion;
+    /** Enimie animation textures*/
+    private Texture enemieTexture;
     /** Obstacle position */
     private Vector2 position;
     /** Obstacle textures bounds */
@@ -31,131 +34,120 @@ public class Obstacle {
     private Random rand;
     /** Animation of obstacle exploding */
     private Animation explosionAnimation;
-    /** Obstacle destroied */
+    /**Animation of the enemie moving.*/
+    private Animation enemieAnimation;
+    /** Enemie destroied */
     private boolean destroied;
 
     /**
-     * Obstacle constructor
+     * Enemie constructor
      * @param y position in the y axis
      */
-    public Obstacle(float y){
-        image = new Texture("obstaclesBomb.png");
+    public Enemie(float y){
+        image = new Texture("enemie.png");
         rand = new Random();
 
         position = new Vector2(rand.nextInt(VARIATION), y);
-
-        Random mov = new Random();
-        int num = mov.nextInt(5);
-        movX = (num == 0);
 
         bounds = new Rectangle(position.x, position.y, image.getWidth(),image.getHeight());
 
         textureExplosion = new Texture("Explosion-Sprite-Sheet.png");
         explosionAnimation = new Animation(new TextureRegion(textureExplosion),5,0.6f);
 
+        enemieTexture=new Texture("enemieImages.png");
+        enemieAnimation=new Animation(new TextureRegion(enemieTexture),3,0.4f);
+
+
+
         destroied = false;
     }
 
     /**
-     * Draws the visible obstacle
-     * @param batch Batch were obstacle is going to be drawn
+     * Draws the visible enemie.
+     * @param batch Batch were obstacle is going to be drawn.
      */
     public void render(SpriteBatch batch){
         batch.begin();
         if (!destroied)
-            batch.draw(image, position.x, position.y);
+            batch.draw(enemieAnimation.getCurrFrame(),getPosition().x,getPosition().y,ENEMIE_WIDTH,ENEMIE_HEIGHT);
         else
             batch.draw(explosionAnimation.getCurrFrame(),getPosition().x,getPosition().y, 118 ,118);
         batch.end();
     }
 
     /**
-     * Returns the obstacle position
-     * @return Vector of obstacle's position
+     * Returns the enemie position.
+     * @return Vector of obstacle's position.
      */
     public Vector2 getPosition(){ return position; }
 
     /**
-     * Returns the Obstacle texture
-     * @return Obstacle texture
+     * Returns the enemie texture.
+     * @return Enemie texture.
      */
     public Texture getImage(){ return image; }
 
     /**
-     * When the obstacle went out of the screen, it will be repositioned
-     * @param y new position in the y axis
+     * When the enemie went out of the screen, it will be repositioned.
+     * @param y new position in the y axis.
      */
     public void reposition(float y){
         position.set(rand.nextInt(VARIATION), y);
         bounds.setPosition(position.x,position.y);
 
-        Random mov = new Random();
-        int num = mov.nextInt(5);
-        movX = (num == 0);
-
         destroied = false;
     }
 
     /**
-     * Returns the collision with the hero
-     * @param hero Hero bounds
-     * @return True if collides, false if not
+     * Returns the collision with the hero.
+     * @param hero Hero bounds.
+     * @return True if collides, false if not.
      */
     public boolean collides(Rectangle hero){
         return hero.overlaps(bounds);
     }
 
     /**
-     * Disposes the obstacle texture
+     * Disposes the enemie texture.
      */
     public void dispose(){
         image.dispose();
     }
 
     /**
-     * If obstacle had movement, updates the position
-     * @param delta time variation
+     * If enemie had movement, updates the position.
+     * @param delta time variation.
      */
     public void updatePosition(float delta){
-        if (movX){
-            position.add(XMOVEMENT * delta, 0);
-            bounds.setPosition(position.x, position.y);
-        }
 
-        if (position.x < 0 || position.x > 1024 - image.getWidth())
-            XMOVEMENT = -XMOVEMENT;
+        position.add(0,SPEED_Y * delta);
+        bounds.setPosition(position.x, position.y);
+
     }
 
     /**
-     * destroys the obstacle
+     * destroys the enemie.
      */
     public void destroy(){
         destroied = true;
-        movX = false;
     }
 
     /**
-     * Returns true if the obstacle is destroyed
-     * @return
+     * Returns true if the enemie is destroyed.
+     * @return true if the enemie was destroyed, false otherwise.
      */
     public boolean isDestroied(){
         return destroied;
     }
 
     /**
-     * Updates the explosion animation
-     * @param delta time variation
+     * Updates the explosion animation.
+     * @param delta time variation.
      */
     public void update(float delta){
         if(destroied)
             explosionAnimation.update(delta);
-    }
 
-    /**
-     * Defines the movement in the x axis
-     * @param val true or false
-     */
-    public void setMovX(boolean val){
-        movX=true;
+        enemieAnimation.update(delta);
     }
 }

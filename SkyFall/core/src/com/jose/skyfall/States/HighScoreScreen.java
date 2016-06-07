@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.Game.SkyFall;
 
 /**
  * Created by Jose on 02/06/2016.

@@ -10,10 +10,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jose.skyfall.Logic.Background;
+import com.jose.skyfall.Logic.Enemie;
 import com.jose.skyfall.Logic.Hero;
 import com.jose.skyfall.Logic.HighScores;
 import com.jose.skyfall.Logic.Obstacle;
-import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.Game.SkyFall;
 import com.jose.skyfall.Logic.SuperPower;
 import com.jose.skyfall.Screens.Hud;
 
@@ -26,11 +27,15 @@ public class PlayScreen implements Screen {
     private static final int SUPERPOWER_SPACING = 6000;
     private static final int SUPERPOWER_IINTIAL_DISTANCE = 2000;
 
+    private static final int DIAMONDS_COUNT=4;
+    private static final int DIAMONDS_SPACING = 1500;
+
     private static final int INCREASE_SCORE_BY_TIME=1;
     private static final int INCREASE_SCORE_BY_DIAMOND=20;
 
-    private static final int DIAMONDS_COUNT=4;
-    private static final int DIAMONDS_SPACING = 1500;
+    private static final int ENEMIE_SPACING=3000;
+    private static final int ENEMIE_COUNT=4;
+    private static final int ENEMIE_INICIAL_DISTANCE=600;
 
     private SkyFall game;
     private OrthographicCamera gameCam;
@@ -40,6 +45,7 @@ public class PlayScreen implements Screen {
     private Hero hero;
     private Array<Obstacle> obstacles;
     private Array<Diamond> diamonds;
+    private Array<Enemie> enemies;
     private SuperPower sp;
     private Background background;
     private HighScores highScores;
@@ -52,6 +58,7 @@ public class PlayScreen implements Screen {
         this.game=game;
         gameCam=new OrthographicCamera();
         gamePort=new FitViewport(SkyFall.V_WIDTH,SkyFall.V_HEIGHT,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
+        this.game.setIsMusicOn(true);
 
         highScores=new HighScores(game.getWorld());
 
@@ -66,12 +73,17 @@ public class PlayScreen implements Screen {
 
         for (int i = 1; i <= OBSTACLES_COUNT; i++){
             obstacles.add(new Obstacle(background.getTiledHeight()-OBSTACLES_INICIAL_DISTANCE-i*OBSTACLE_SPACING));
-    }
+        }
+
 
         diamonds=new Array<Diamond>();
-
         for(int i=1;i<=DIAMONDS_COUNT;i++) {
             diamonds.add(new Diamond(background.getTiledHeight()-DIAMONDS_SPACING*i));
+        }
+
+        enemies=new Array<Enemie>();
+        for(int i=1;i<=ENEMIE_COUNT;i++) {
+            enemies.add(new Enemie(background.getTiledHeight()-ENEMIE_INICIAL_DISTANCE-i*ENEMIE_SPACING));
         }
 
         sp = new SuperPower(background.getTiledHeight() - SUPERPOWER_IINTIAL_DISTANCE-SUPERPOWER_SPACING);
@@ -146,6 +158,32 @@ public class PlayScreen implements Screen {
             }
         }
 
+        //Enemies----------------------------------------------------------------------
+
+        for (Enemie enemie : enemies){
+            enemie.update(delta);
+            enemie.updatePosition(delta);
+
+            if(gameCam.position.y + (gameCam.viewportHeight/2) < enemie.getPosition().y)
+                enemie.reposition(enemie.getPosition().y - (ENEMIE_SPACING * ENEMIE_COUNT));
+
+            if(enemie.collides(hero.getBounds()) && !enemie.isDestroied()) {
+                if (hero.getSuperPower()){
+                    if(game.getIsMusicOn())
+                        explosionSound.play();
+                    hero.setSuperPower(false);
+                    sp.setCatched(false);
+                    enemie.destroy();
+                }
+                else{
+                    highScores.saveScore();
+                    game.setScreen(new ChooseWorldScreen(game));
+                    dispose();
+                    break;
+                }
+            }
+        }
+
         gameCam.update();
         background.update(gameCam);
     }
@@ -170,8 +208,14 @@ public class PlayScreen implements Screen {
                 game.batch.draw(diamond.getImage(),diamond.getPosition().x,diamond.getPosition().y);
             }
         game.batch.end();
+
         for (Obstacle obstacle : obstacles){
             obstacle.render(game.batch);
+        }
+
+        for(Enemie enemie: enemies)
+        {
+            enemie.render(game.batch);
         }
 
         hud.stage.draw();

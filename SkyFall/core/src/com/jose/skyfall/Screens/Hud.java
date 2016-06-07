@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.jose.skyfall.Logic.SkyFall;
+import com.jose.skyfall.Game.SkyFall;
 
 /**
  * Created by Jose on 08/05/2016.

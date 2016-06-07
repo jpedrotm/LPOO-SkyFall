@@ -10,13 +10,21 @@ import java.io.IOException;
  */
 public class HighScores {
 
-
+    /** Name of the file */
     private String HIGHSCORE_FILE_NAME="world";
+    /** Extension of the file */
     private String HIGHSCORE_FILE_EXTENSION=".dat";
+    /** HighScore value */
     private int highscore;
+    /** Actual score */
     private int score;
+    /** World the score was made */
     private int world;
 
+    /**
+     * HighScore constructor
+     * @param world World the score was made
+     */
     public HighScores(int world){
 
         this.score=0;
@@ -25,15 +33,26 @@ public class HighScores {
 
     }
 
+    /**
+     * Returns the score
+     * @return score value
+     */
     public int getScore(){
         return score;
     }
 
+    /**
+     * Update score value
+     * @param val value of the update
+     */
     public void update(int val){
 
         score+=val;
     }
 
+    /**
+     * reads the HigScore in this world
+     */
     public void loadHighscore() {
         Gdx.app.log("entrou load","entrou load");
         FileHandle highscoreF = Gdx.files.local(HIGHSCORE_FILE_NAME + world + HIGHSCORE_FILE_EXTENSION);
@@ -49,6 +68,9 @@ public class HighScores {
         }
     }
 
+    /**
+     * Saves the score made
+     */
     public void saveScore() {
         Gdx.app.log("score","score: "+score);
         Gdx.app.log("highscore","highscore: "+highscore);
