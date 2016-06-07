@@ -55,6 +55,7 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(SkyFall game){
+
         this.game=game;
         gameCam=new OrthographicCamera();
         gamePort=new FitViewport(SkyFall.V_WIDTH,SkyFall.V_HEIGHT,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
@@ -135,7 +136,9 @@ public class PlayScreen implements Screen {
                 }
                 else{
                     highScores.saveScore();
+                    Gdx.app.log("ANTES","ANTES");
                     game.setScreen(new ChooseWorldScreen(game));
+                    Gdx.app.log("DEPOIS","DEPOIS");
                     dispose();
                     break;
                 }
@@ -177,7 +180,9 @@ public class PlayScreen implements Screen {
                 }
                 else{
                     highScores.saveScore();
+                    Gdx.app.log("ANTES","ANTES");
                     game.setScreen(new ChooseWorldScreen(game));
+                    Gdx.app.log("DEPOIS","DEPOIS");
                     dispose();
                     break;
                 }
@@ -246,6 +251,7 @@ public class PlayScreen implements Screen {
 
         hero.dispose();
         background.dispose();
+
         for(Diamond ds : diamonds)
         {
             ds.dispose();
@@ -258,6 +264,7 @@ public class PlayScreen implements Screen {
         {
             enemie.dispose();
         }
+
         sp.dispose();
         diamondCatchedSound.dispose();
         explosionSound.dispose();

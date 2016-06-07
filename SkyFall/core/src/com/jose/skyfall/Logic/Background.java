@@ -72,6 +72,5 @@ public class Background {
      */
     public void dispose(){
         map.dispose();
-        renderer.dispose();
     }
 }
