@@ -11,11 +11,12 @@ public class SkyFall extends Game {
 	public SpriteBatch batch;
 
 	private int world=1;
-	private boolean isMusicOn=true;
+	private boolean isMusicOn;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		isMusicOn=true;
 		setScreen(new MenuScreen(this));
 	}
 

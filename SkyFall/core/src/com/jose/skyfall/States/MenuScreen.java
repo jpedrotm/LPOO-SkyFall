@@ -49,9 +49,11 @@ public class MenuScreen implements Screen {
         stage = new Stage(menuPort);
         stage.clear();
         Gdx.input.setInputProcessor(stage);
+        music = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
 
-        music=Gdx.audio.newMusic(Gdx.files.internal("audio/gameMusic.ogg"));
-        music.play();
+        if(game.getIsMusicOn()) {
+            music.play();
+        }
 
         //buttons
         ButtonsPack = new TextureAtlas("menuButtons1.pack");
@@ -77,9 +79,16 @@ public class MenuScreen implements Screen {
         exitButton = new ImageButton(style);
         exitButton.setPosition(width/2-playButton.getWidth()/2, height/2-220);
 
-        style = new ImageButton.ImageButtonStyle();
-        style.up = skin.getDrawable("musicButtonActive");
-        style.down = skin.getDrawable("musicButtonDisable");
+        if(game.getIsMusicOn()){
+            style = new ImageButton.ImageButtonStyle();
+            style.up = skin.getDrawable("musicButtonActive");
+            style.checked = skin.getDrawable("musicButtonDisable");
+        }
+        else{
+            style = new ImageButton.ImageButtonStyle();
+            style.up = skin.getDrawable("musicButtonDisable");
+            style.checked = skin.getDrawable("musicButtonActive");
+        }
         musicButton = new ImageButton(style);
         musicButton.setPosition(width/2-playButton.getWidth()/2, height/2-120);
 
@@ -97,7 +106,8 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                music.stop();
+                if(game.getIsMusicOn())
+                    music.stop();
                 Screen screen = new ChooseWorldScreen(game);
                 game.setScreen(screen);
                 dispose();
@@ -126,7 +136,6 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(game.getIsMusicOn())
                 {
-                    Gdx.app.log("OLA","OLA");
                     game.setIsMusicOn(false);
                     music.stop();
                 }
@@ -148,7 +157,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override

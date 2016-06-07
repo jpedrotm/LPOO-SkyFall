@@ -46,16 +46,17 @@ public class Hero {
      * @param tiledWidth Map's width
      * @param tiledHeight Map's height
      */
-    public Hero(int tiledWidth,int tiledHeight){
+    public Hero(int tiledWidth,int tiledHeight,int world){
 
-        texture = new Texture("PlayerGreen.png");
+        Gdx.app.log("OLA","WORLD "+world);
+        texture = new Texture("player"+world+".png");
         float x=tiledWidth/2-texture.getWidth()/2;
         int y=tiledHeight-texture.getHeight()-100; //screenHeight/2-texture.getHeight()/2;
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
-        bounds = new Rectangle(x, y, texture.getWidth(),texture.getHeight());
+        bounds = new Rectangle(x, y, texture.getWidth()/3,texture.getHeight());
 
-        textureAnimation=new Texture("PlayerGreen.png");
+        textureAnimation=new Texture("player"+world+".png");
         heroAnimation=new Animation(new TextureRegion(textureAnimation),3,0.5f);
 
         textureSuperPowerAnimation = new Texture("greenPlayerBubble.png");

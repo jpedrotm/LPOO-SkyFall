@@ -59,7 +59,6 @@ public class PlayScreen implements Screen {
         this.game=game;
         gameCam=new OrthographicCamera();
         gamePort=new FitViewport(SkyFall.V_WIDTH,SkyFall.V_HEIGHT,gameCam); //FitViewport reposiciona e redimensiona o jogo de acordo com o tamanho do ecrã
-        this.game.setIsMusicOn(true);
 
         highScores=new HighScores(game.getWorld());
 
@@ -69,7 +68,7 @@ public class PlayScreen implements Screen {
 
         background=new Background("world"+game.getWorld()+".tmx");
 
-        hero = new Hero(background.getTiledWidth(),background.getTiledHeight());
+        hero = new Hero(background.getTiledWidth(),background.getTiledHeight(),game.getWorld());
         obstacles = new Array<Obstacle>();
 
         for (int i = 1; i <= OBSTACLES_COUNT; i++){
